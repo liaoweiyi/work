@@ -1,0 +1,192 @@
+#在Android 开发中会遇到value string 中
+<string name="xx" translatable="false">xx</string>
+意思就是不管系统是什么语言,它都只显示xx。 
+通常用来表示定义一些开关项。
+
+******************************************************
+
+#宏控保存地址
+system/build.porp
+
+*******************
+
+#查看进程活动
+adb shell dumpsys activity
+adb shell dumpsys activity Top 
+
+****************************
+
+查看属性值
+adb shell getprop
+配置属性值
+adb shell setprop ""  ""  （ro.开头的属性仅为可读。persist.开头的属性为可读可写。persist）
+
+***************
+
+配置值输出
+adb pull system/bulid.prop
+
+******************
+
+输出所有log
+adb logcat > TEXT.text
+
+*********************
+
+实时查看Log
+adb logcat -s  ""
+
+*************************
+
+git  reset  --soft  commit号   回退某个提交的commit，log里面不会再有之前提交的记录。
+git  reset  --hard  commit号   回退某个提交的修改，log里面不会再有之前提交的记录。
+
+
+暂存
+git stash 
+取出
+git stash pop 
+
+****************************
+
+android 是否为空字符 boolean android.text.TextUtils.isEmpty(CharSequence str) 
+
+java isEmpty()判断内容是否为空   ；  xx==null 判断字符对象是否为空   
+
+ex：	String a = new String();  
+        String b = "";  
+        String c = null; 
+		
+		此时a是分配了内存空间，但值为空，是绝对的空，是一种有值（值存在为空而已）  
+		此时b是分配了内存空间，值为空字符串，是相对的空，是一种有值（值存在为空字串）  
+		此时c是未分配内存空间，无值，是一种无值(值不存在)  
+		
+		
+****************************
+
+#SharedPreferences 中的值不共享 只有当前context才可以读写
+
+****************************
+
+全局值的存取
+Settings.System.getString(mContext.getContentResolver(), "powersave_super"))
+Settings.System.putString(mContext.getContentResolver(), "powersave_super", "off");
+
+
+************
+adb reboot  recovery
+
+*****************
+通过命令行执行adb shell am broadcast手动发送广播通知。
+
+adb shell am broadcast 后面的参数有：
+
+[-a <ACTION>]             //需要拦截的广播类型
+[-d <DATA_URI>]
+[-t <MIME_TYPE>] 
+[-c <CATEGORY> [-c <CATEGORY>] ...] 
+[-e|--es <EXTRA_KEY> <EXTRA_STRING_VALUE> ...]    //string类型
+[--ez <EXTRA_KEY> <EXTRA_BOOLEAN_VALUE> ...]     //boolean类型
+[-e|--ei <EXTRA_KEY> <EXTRA_INT_VALUE> ...]             //int类型
+[-n <COMPONENT>]                                                           //需要监听的广播类
+[-f <FLAGS>] [<URI>]
+
+例如：
+adb shell am broadcast -a Android.net.conn.CONNECTIVITY_CHANGE -n com.platform7725.gude.feng/com.platform7725.gamesdk.InstallReceiver --es test_string"this is test string" --ei test_int 100 --ez test_booleantrue
+说明：蓝色为key（没有“”），红色为value，分别为String类型，int类型，boolean类型
+
+**************
+BUILD_GMS=yes 
+make -j32 2>&1 | tee build.log
+*************
+1.进入adb shell ;
+2.输入dumpsys meminfo (PID或者是包名)，出现如下图；
+
+参数含义：
+
+dalvik:dalvik使用的内存
+
+native:native堆上的内存，指C\C++堆的内存（android 3.0以后bitmap就是放在这儿）
+
+other：除了dalvik和native的内存，包含C\C++非堆内存······
+
+Pss:该内存指将共享内存按比例分配到使用了共享内存的进程
+
+allocated:已使用的内存
+
+free:空闲的内存
+
+private dirty:非共享，又不能被换页出去的内存（比如linux系统中为了提高分配内存速度而缓冲的小对象，即使你的进程已经退出，该内存也不会被释放）
+
+share dirty:共享，但有不能被换页出去的内存
+****************
+查看CPU 消耗
+
+1.进入adb shell
+2.输入top -m 10 -s cpu 可查看占用cpu最高的前10个程序（-t 显示进程名称，-s 按指定行排序，-n 在退出前刷新几次，-d 刷新间隔，-m 显示最大数量）
+参数含义：
+
+PID：progress identification，应用程序ID
+
+S: 进程的状态，其中S表示休眠，R表示正在运行，Z表示僵死状态，N表示该进程优先值是负数。
+
+#THR：程序当前所用的线程数
+
+VSS：Virtual Set Size虚拟耗用内存（包含共享库占用的内存）
+
+RSS： Resident Set Size实际使用物理内存（包含共享库占用的内存）
+
+PCY：不知道什么意思，期待解答
+
+UID：User　Identification，用户身份ID
+
+Name:应用程序名称
+***********************************
+Android:excludeFromRecents="true"
+
+
+设置为TRUE，自己的activity不会出现在最近任务列表里。注意：它需要设置在入口activity的属性里
+
+才起作用，给其他的activity设置不起作用。
+
+第二个：
+
+
+android:noHistory="true"
+设置为TRUE，该activity不可见的时候就会消失
+*********************************
+--color=auto 
+**********************
+adb shell pm list users
+********************
+查看屏幕分辨率
+adb shell wm size
+*****************
+BUILD_GMS=yes make -j32 2>&1 | tee build.log
+###
+设计模式：可复用面向对象软件的基础
+###
+************************
+在清单的 <activity> 或 <application> 节点中设置该属性，启用或禁用多窗口显示：
+
+android:resizeableActivity=["true" | "false"]
+************************
+repo forall -c "git checkout -- ./; git clean -df"
+BUILD_GMS=yes make -j32 2>&1 | tee build.log
+
+******************
+打开关机动画 persist.operator.optr=CUST
+
+******************
+联发科账号
+zhouxiang01@wind-mobi.com
+yd@szsw
+
+oudelin@wind-mobi.com
+Password:  yd@sw5
+*********************
+make  BUILD_GMS=yes -j24 2>&1 | tee build.log && make -j24 BUILD_GMS=yes otapackage 2>&1 | tee gms.log
+
+./release_version_efuse.sh Z285 all
+
+./vendor/mediatek/proprietary/scripts/sign-image/sign_image.sh 
