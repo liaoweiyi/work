@@ -190,3 +190,37 @@ make  BUILD_GMS=yes -j24 2>&1 | tee build.log && make -j24 BUILD_GMS=yes otapack
 ./release_version_efuse.sh Z285 all
 
 ./vendor/mediatek/proprietary/scripts/sign-image/sign_image.sh 
+
+**********************
+View 事件传递伪代码：
+public  boolean dispatchTouchEvent(MotionEvent ev){
+        boolean consume = false ;
+        if( onInterceptTouchEvent(ev) ){
+            consume = onTouchEvent(ev);
+        }else {
+            consume = child.dispatchTouchEvent(ev);
+        }
+
+        return consume;
+    }
+ps：事件从父布局往下传递
+
+*************************
+活动不在近期任务显示
+AndroidManifest xml文件中主activity设置属性:android:excludeFromRecents=“true”
+
+************
+打开自由模式宏
+adb shell settings put global enable_freeform_support 1
+
+*************
+
+1）SystemUI属于系统apk
+android:sharedUserId="android.uid.systemui"
+
+2)SystemUI属于核心apk
+coreApp="true"
+
+3)SystemUI不会被KILL，即被KILL后会自动重启
+android:persistent="true"
+这里的KILL主要指不会被low memory killer杀掉
