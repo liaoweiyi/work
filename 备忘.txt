@@ -172,6 +172,7 @@ BUILD_GMS=yes make -j32 2>&1 | tee build.log
 android:resizeableActivity=["true" | "false"]
 ************************
 repo forall -c "git checkout -- ./; git clean -df"
+
 BUILD_GMS=yes make -j32 2>&1 | tee build.log
 
 ******************
@@ -185,9 +186,8 @@ yd@szsw
 oudelin@wind-mobi.com
 Password:  yd@sw5
 *********************
-make  BUILD_GMS=yes -j24 2>&1 | tee build.log && make -j24 BUILD_GMS=yes otapackage 2>&1 | tee gms.log
-
-./release_version_efuse.sh Z285 all
+make  BUILD_GMS=yes -j24 2>&1 | tee build.log && make -j24 BUILD_GMS=yes otapackage 2>&1 | tee gms.log;./vendor/mediatek/proprietary/scripts/sign-image/sign_image.sh  
+./release_version_efuse.sh A455 all
 
 ./vendor/mediatek/proprietary/scripts/sign-image/sign_image.sh 
 
@@ -224,3 +224,25 @@ coreApp="true"
 3)SystemUI不会被KILL，即被KILL后会自动重启
 android:persistent="true"
 这里的KILL主要指不会被low memory killer杀掉
+*************
+分区表位置
+wind\Z285\GIG\custom_files\device\mediatek\build\build\tools\ptgen\MT6737M
+
+
+*****************
+adb shell uiautomator dump && adb pull /sdcard/window_dump.xml
+
+
+******************
+./build/tools/releasetools/ota_from_target_files -s ./device/mediatek/build/releasetools/mt_ota_from_target_files -n --block -i <旧版本target-files文件路径>  <新版本target-files文件路径> update.zip
+
+
+ ./vendor/mediatek/proprietary/scripts/sign-image/sign_image.sh      
+
+
+******************
+
+git rm --cached fileName 
+****************
+查看广播
+adb shell dumpsys |grep BroadcastRecord 
